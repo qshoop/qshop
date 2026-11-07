@@ -13,12 +13,7 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    'qshoop.ir',
-    'www.qshoop.ir',
-]
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost,qshoop.ir,www.qshoop.ir,qshoop.onrender.com').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
