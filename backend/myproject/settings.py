@@ -16,9 +16,8 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
-    'yourdomain.com',
-    'www.yourdomain.com',
-    'app-python-7884d.ir-1.abrhapaas.com',
+    'qshoop.ir',
+    'www.qshoop.ir',
 ]
 
 INSTALLED_APPS = [
