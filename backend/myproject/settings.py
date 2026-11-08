@@ -10,7 +10,15 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost,qshoop.ir,www.qshoop.ir,qshoop.onrender.com').split(',')
+# ۱. اجازه دادن به همه دامنه‌ها برای رفع ارور 400
+ALLOWED_HOSTS = ['*']
+
+# ۲. این خط برای وقتیه که پارس‌پک SSL رو تموم می‌کنه
+CSRF_TRUSTED_ORIGINS = [
+    'https://qshoop.ir',
+    'https://www.qshoop.ir',
+    'https://qshoop2-app.apps.teh11.abrhapaas.com'
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
