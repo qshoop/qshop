@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-{% load static %}
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Qshoop | در حال راه‌اندازی</title>
   <meta name="description" content="Qshoop، پلتفرم ارتباط هوشمند فروشنده و مشتری. به‌زودی در دسترس خواهد بود." />
+  
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <style>
     :root {
@@ -23,7 +21,6 @@
       --text-secondary: #6B7280;
       --border: rgba(0, 0, 0, 0.06);
 
-      /* ✅ متغیرهای ریسپانسیو (مقدار پیش‌فرض = دسکتاپ) */
       --card-max-width: 760px;
       --card-padding-x: 52px;
       --card-padding-y: 56px;
@@ -42,8 +39,7 @@
       box-sizing: border-box;
     }
 
-    html,
-    body {
+    html, body {
       height: 100%;
     }
 
@@ -80,9 +76,7 @@
       max-width: var(--card-max-width);
       width: 100%;
       text-align: center;
-      box-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.04),
-        0 24px 60px rgba(0, 0, 0, 0.10);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 24px 60px rgba(0, 0, 0, 0.10);
       border: 1px solid var(--border);
     }
 
@@ -130,20 +124,10 @@
     }
 
     @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-
-      50% {
-        opacity: 0.35;
-        transform: scale(0.85);
-      }
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.85); }
     }
 
-    /* ===== ویژگی‌ها ===== */
     .features {
       display: grid;
       grid-template-columns: repeat(var(--features-cols), 1fr);
@@ -164,18 +148,12 @@
       color: var(--text);
       text-align: right;
       cursor: pointer;
-      transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease,
-        border-color 0.25s ease,
-        background 0.25s ease;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
     }
 
     .feature:hover {
       transform: translateY(-4px) scale(1.02);
-      box-shadow:
-        0 10px 24px rgba(1, 121, 111, 0.15),
-        0 2px 6px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 10px 24px rgba(1, 121, 111, 0.15), 0 2px 6px rgba(0, 0, 0, 0.06);
       border-color: var(--primary);
       background: #ffffff;
     }
@@ -190,191 +168,39 @@
       transform: scale(1.15) rotate(-6deg);
     }
 
-    /* ===== فوتر ===== */
-    .footer {
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-      font-size: 14px;
-      color: var(--text-secondary);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .footer a {
-      color: var(--primary);
-      font-weight: 700;
-      text-decoration: none;
-      transition: opacity 0.2s;
-      word-break: break-all;
-    }
-
-    .footer a:hover {
-      opacity: 0.75;
-    }
-
-    /* ============================================================
-   ✅ ریسپانسیو — ۵ بریک‌پوینت
-   ============================================================ */
-
-    /* 🖥 دسکتاپ بزرگ (≥ 1200px) — مقدار پیش‌فرض همینه */
     @media (min-width: 1200px) {
-      :root {
-        --card-max-width: 780px;
-        --h1-size: 32px;
-        --lead-size: 17px;
-        --feature-size: 15px;
-      }
+      :root { --card-max-width: 780px; --h1-size: 32px; --lead-size: 17px; --feature-size: 15px; }
     }
 
-    /* 💻 لپ‌تاپ (992px – 1199px) */
     @media (max-width: 1199px) {
-      :root {
-        --card-max-width: 700px;
-        --card-padding-x: 44px;
-        --card-padding-y: 48px;
-        --h1-size: 28px;
-        --lead-size: 15.5px;
-        --feature-size: 14.5px;
-      }
+      :root { --card-max-width: 700px; --card-padding-x: 44px; --card-padding-y: 48px; --h1-size: 28px; --lead-size: 15.5px; --feature-size: 14.5px; }
     }
 
-    /* 📱 تبلت (768px – 991px) */
     @media (max-width: 991px) {
-      :root {
-        --card-max-width: 620px;
-        --card-padding-x: 36px;
-        --card-padding-y: 44px;
-        --card-radius: 24px;
-        --h1-size: 25px;
-        --lead-size: 15px;
-        --feature-size: 14px;
-        --feature-icon-size: 20px;
-      }
+      :root { --card-max-width: 620px; --card-padding-x: 36px; --card-padding-y: 44px; --card-radius: 24px; --h1-size: 25px; --lead-size: 15px; --feature-size: 14px; --feature-icon-size: 20px; }
     }
 
-    /* 📱 گوشی بزرگ/فبلت (480px – 767px) */
     @media (max-width: 767px) {
-      :root {
-        --card-max-width: 100%;
-        --card-padding-x: 26px;
-        --card-padding-y: 36px;
-        --card-radius: 22px;
-        --h1-size: 22px;
-        --lead-size: 14px;
-        --feature-size: 13.5px;
-        --feature-icon-size: 18px;
-        --features-cols: 1;
-        /* ✅ تک‌ستون */
-        --features-gap: 10px;
-      }
-
-      body {
-        padding: 16px;
-      }
-
-      /* ✅ متن تو گوشی می‌شکنه */
-      .lead {
-        white-space: normal;
-        overflow: visible;
-        text-overflow: clip;
-      }
-
-      .feature {
-        padding: 12px 14px;
-        border-radius: 12px;
-      }
-
-      .status {
-        font-size: 13px;
-        padding: 8px 14px;
-        margin-bottom: 26px;
-      }
-
-      .footer {
-        font-size: 13px;
-        padding-top: 20px;
-      }
+      :root { --card-max-width: 100%; --card-padding-x: 26px; --card-padding-y: 36px; --card-radius: 22px; --h1-size: 22px; --lead-size: 14px; --feature-size: 13.5px; --feature-icon-size: 18px; --features-cols: 1; --features-gap: 10px; }
+      body { padding: 16px; }
+      .lead { white-space: normal; overflow: visible; text-overflow: clip; }
+      .feature { padding: 12px 14px; border-radius: 12px; }
+      .status { font-size: 13px; padding: 8px 14px; margin-bottom: 26px; }
     }
 
-    /* 📱 گوشی کوچک (< 480px) */
     @media (max-width: 479px) {
-      :root {
-        --card-padding-x: 20px;
-        --card-padding-y: 30px;
-        --card-radius: 18px;
-        --h1-size: 19px;
-        --lead-size: 13px;
-        --feature-size: 13px;
-        --feature-icon-size: 17px;
-      }
-
-      body {
-        padding: 12px;
-      }
-
-      h1 {
-        letter-spacing: -0.2px;
-      }
-
-      .status {
-        font-size: 12px;
-        padding: 7px 12px;
-      }
-
-      .feature {
-        padding: 10px 12px;
-        gap: 8px;
-      }
-
-      .footer {
-        font-size: 12px;
-        flex-direction: column;
-        gap: 2px;
-      }
-
-      .footer a {
-        font-size: 13px;
-      }
-    }
-
-    /* ✅ برای صفحه‌های خیلی کوتاه (مثلاً لپ‌تاپ افقی) */
-    @media (max-height: 640px) and (min-width: 768px) {
-      body {
-        padding: 16px;
-      }
-
-      .card {
-        padding-top: 32px;
-        padding-bottom: 32px;
-      }
-
-      h1 {
-        margin-bottom: 10px;
-      }
-
-      .lead {
-        margin-bottom: 18px;
-      }
-
-      .status {
-        margin-bottom: 22px;
-      }
-
-      .features {
-        margin-bottom: 22px;
-      }
+      :root { --card-padding-x: 20px; --card-padding-y: 30px; --card-radius: 18px; --h1-size: 19px; --lead-size: 13px; --feature-size: 13px; --feature-icon-size: 17px; }
+      body { padding: 12px; }
+      .status { font-size: 12px; padding: 7px 12px; }
+      .feature { padding: 10px 12px; gap: 8px; }
     }
   </style>
-
+</head>
 
 <body>
   <div class="bg-glow"></div>
 
   <main class="card">
-
     <h1>Qshoop <span>در حال راه‌اندازی</span></h1>
 
     <p class="lead">
@@ -404,13 +230,6 @@
         <span>احراز هویت امن</span>
       </div>
     </div>
-    <!-- 
-    <footer class="footer">
-      <span>برای اطلاع از اخبار:</span>
-      <a href="mailto:support@Qshoop.com">Qshoop.com</a>
-    </footer> -->
   </main>
-
 </body>
-
 </html>
