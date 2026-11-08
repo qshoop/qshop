@@ -3,9 +3,6 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# مسیر پوشه frantend (یک سطح بالاتر از backend)
-FRANTEND_DIR = BASE_DIR.parent / 'frantend'
-
 SECRET_KEY = os.environ.get(
     'SECRET_KEY',
     'django-insecure-!!v0gy3d=5_v7-*3osbxu+7%)v=nx80-@gbxrz*&m&fetow0a2'
@@ -76,15 +73,16 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR]
+# این خط رو به BASE_DIR تغییر دادیم تا style.css رو از کنار manage.py پیدا کنه
+STATICFILES_DIRS = [BASE_DIR] 
 
-# Django 6: به جای STATICFILES_STORAGE از STORAGES استفاده می‌شود
+# Django 6
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
