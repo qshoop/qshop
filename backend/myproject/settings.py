@@ -13,12 +13,16 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 # ۱. اجازه دادن به همه دامنه‌ها برای رفع ارور 400
 ALLOWED_HOSTS = ['*']
 
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # ۲. این خط برای وقتیه که پارس‌پک SSL رو تموم می‌کنه
 CSRF_TRUSTED_ORIGINS = [
     'https://qshoop.ir',
     'https://www.qshoop.ir',
     'https://qshoop2-app.apps.teh11.abrhapaas.com'
 ]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
