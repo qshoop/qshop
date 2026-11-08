@@ -15,7 +15,7 @@ ALLOWED_HOSTS = ['*']
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
+WHITENOISE_USE_FINDERS = True
 # ۲. این خط برای وقتیه که پارس‌پک SSL رو تموم می‌کنه
 CSRF_TRUSTED_ORIGINS = [
     'https://qshoop.ir',
