@@ -76,7 +76,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [FRANTEND_DIR]
+STATICFILES_DIRS = BASE_DIR / 'static'
 
 # Django 6: به جای STATICFILES_STORAGE از STORAGES استفاده می‌شود
 STORAGES = {
