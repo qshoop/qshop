@@ -1,7 +1,6 @@
-import os
 import subprocess
+import sys
 
 if __name__ == "__main__":
-    # اجرای فایل start.sh که کارهای migrate و gunicorn رو انجام می‌ده
-    os.chmod("start.sh", 0o755)
-    subprocess.run(["./start.sh"])
+    # اجرای فایل start.sh با استفاده از bash
+    sys.exit(subprocess.call(["bash", "start.sh"]))
