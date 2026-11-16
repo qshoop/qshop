@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" data-theme="light">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Qshoop | در حال راه‌اندازی</title>
-  <meta name="description" content="Qshoop، پلتفرم ارتباط هوشمند فروشنده و مشتری. به‌زودی در دسترس خواهد بود." />
-  
+  <title>Q shop</title>
+  <meta name="description" content="Q shop، پلتفرم ارتباط هوشمند فروشنده و مشتری." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
 
   <style>
     :root {
@@ -17,20 +19,19 @@
       --secondary: #4666FF;
       --bg: #F0F4F3;
       --surface: #FFFFFF;
+      --surface-2: #E8EFED;
       --text: #111827;
       --text-secondary: #6B7280;
       --border: rgba(0, 0, 0, 0.06);
+    }
 
-      --card-max-width: 760px;
-      --card-padding-x: 52px;
-      --card-padding-y: 56px;
-      --card-radius: 28px;
-      --h1-size: 30px;
-      --lead-size: 16px;
-      --feature-size: 15px;
-      --feature-icon-size: 22px;
-      --features-cols: 2;
-      --features-gap: 14px;
+    [data-theme="dark"] {
+      --bg: #0B1211;
+      --surface: #131C1A;
+      --surface-2: #1B2523;
+      --text: #F1F5F3;
+      --text-secondary: #94A3A0;
+      --border: rgba(255, 255, 255, 0.08);
     }
 
     * {
@@ -39,24 +40,22 @@
       box-sizing: border-box;
     }
 
-    html, body {
-      height: 100%;
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
       font-family: 'Vazirmatn', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
       line-height: 1.8;
-      position: relative;
+      min-height: 100vh;
       overflow-x: hidden;
+      transition: background-color 0.4s ease, color 0.4s ease;
+      -webkit-text-size-adjust: 100%;
     }
 
+    /* ===== پس‌زمینه گرادیانی ===== */
     .bg-glow {
       position: fixed;
       inset: 0;
@@ -65,134 +64,818 @@
         radial-gradient(circle at 85% 80%, rgba(70, 102, 255, 0.15), transparent 45%);
       z-index: 0;
       pointer-events: none;
+      transition: opacity 0.4s ease;
     }
 
-    .card {
+    [data-theme="dark"] .bg-glow {
+      opacity: 0.7;
+    }
+
+    /* ===== دکمه تم ===== */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      box-shadow:
+        0 4px 20px rgba(1, 121, 111, 0.12),
+        0 1px 3px rgba(0, 0, 0, 0.06);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.4s ease,
+        background-color 0.4s ease;
+      overflow: hidden;
+    }
+
+    .theme-toggle::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 50%;
+      padding: 1.5px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.55;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .theme-toggle:hover::before {
+      opacity: 1;
+    }
+
+    @media (hover: hover) {
+      .theme-toggle:hover {
+        transform: translateY(-2px) scale(1.06);
+        box-shadow:
+          0 8px 28px rgba(1, 121, 111, 0.25),
+          0 0 24px rgba(70, 102, 255, 0.18);
+      }
+    }
+
+    .theme-toggle:active {
+      transform: scale(0.96);
+    }
+
+    .theme-toggle .icon {
+      grid-area: 1 / 1;
+      line-height: 1;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.3s ease;
+    }
+
+    .theme-toggle .icon-sun {
+      opacity: 0;
+      transform: rotate(-180deg) scale(0.4);
+    }
+
+    .theme-toggle .icon-moon {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+
+    [data-theme="dark"] .theme-toggle .icon-sun {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+
+    [data-theme="dark"] .theme-toggle .icon-moon {
+      opacity: 0;
+      transform: rotate(180deg) scale(0.4);
+    }
+
+    /* ===== Hero ===== */
+    .hero {
       position: relative;
       z-index: 1;
-      background: var(--surface);
-      border-radius: var(--card-radius);
-      padding: var(--card-padding-y) var(--card-padding-x);
-      max-width: var(--card-max-width);
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 24px 60px rgba(0, 0, 0, 0.10);
-      border: 1px solid var(--border);
-    }
-
-    h1 {
-      font-size: var(--h1-size);
-      font-weight: 800;
-      margin-bottom: 14px;
-      letter-spacing: -0.3px;
-      line-height: 1.4;
-    }
-
-    h1 span {
-      color: var(--primary);
-      display: inline-block;
-    }
-
-    .lead {
-      color: var(--text-secondary);
-      font-size: var(--lead-size);
-      margin-bottom: 26px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      background: rgba(70, 102, 255, 0.09);
-      color: var(--secondary);
-      padding: 9px 18px;
-      border-radius: 999px;
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 34px;
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      background: var(--secondary);
-      border-radius: 50%;
-      animation: pulse 1.6s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.35; transform: scale(0.85); }
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(var(--features-cols), 1fr);
-      gap: var(--features-gap);
-      margin-bottom: 32px;
-    }
-
-    .feature {
+      min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       align-items: center;
-      gap: 10px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px 16px;
-      font-size: var(--feature-size);
-      font-weight: 600;
+      justify-content: center;
+      padding: 80px 20px 60px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .brand-wrap {
+      position: relative;
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    .brand-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -80px;
+      background: radial-gradient(circle, rgba(1, 121, 111, 0.18), transparent 65%);
+      filter: blur(50px);
+      z-index: -1;
+      animation: glowPulse 5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes glowPulse {
+
+      0%,
+      100% {
+        opacity: 0.6;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.12);
+      }
+    }
+
+    .hero .brand {
+      font-size: clamp(80px, 17vw, 200px);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -5px;
       color: var(--text);
+      direction: ltr;
+      display: inline-block;
+      white-space: nowrap;
+      max-width: 100%;
+    }
+
+    .hero .brand .q {
+      display: inline-block;
+      margin-right: 0.12em;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 4px 16px rgba(1, 121, 111, 0.25));
+    }
+
+    /* ===== گالری ===== */
+    .gallery {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8vh;
+      padding: 8vh 6vw 18vh;
+    }
+
+    /* ====== SLIDE — بدون چرخش، صاف، آماده‌ی هاور سه‌بعدی ====== */
+    .slide {
+      position: relative;
+      width: min(62%, 720px);
+      aspect-ratio: 4 / 3;
+      opacity: 0;
+      will-change: opacity, transform;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow:
+        0 20px 50px rgba(1, 121, 111, 0.22),
+        0 10px 20px rgba(0, 0, 0, 0.10);
+      transition: box-shadow 0.4s ease, transform 0.15s ease-out;
+
+      /* متغیرهای انیمیشن — مقداردهی اولیه */
+      --parallax-y: 0px;
+      /* برای افکت اسکرول */
+      --rx: 0deg;
+      /* چرخش افقی (از ماوس) */
+      --ry: 0deg;
+      /* چرخش عمودی (از ماوس) */
+      --hover-scale: 1;
+      /* زوم در هاور */
+      --glare-x: 50%;
+      /* موقعیت نور منعکس‌شونده */
+      --glare-y: 50%;
+
+      transform:
+        perspective(1200px) translateY(var(--parallax-y)) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--hover-scale));
+    }
+
+    .slide:nth-child(odd) {
+      align-self: flex-start;
+    }
+
+    .slide:nth-child(even) {
+      align-self: flex-end;
+    }
+
+    /* لایه‌ی نور منعکس‌شونده — با حرکت ماوس جابه‌جا می‌شه */
+    .slide::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--glare-x) var(--glare-y),
+          rgba(255, 255, 255, 0.30) 0%,
+          rgba(255, 255, 255, 0.08) 30%,
+          transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+
+    /* وقتی کاربر لمس می‌کنه، نور منعکس‌شونده فعال بشه */
+    .slide.touch-active::after {
+      opacity: 1;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: scale(1);
+    }
+
+    /* ===== هاور سه‌بعدی (فقط دستگاه‌های ماوس‌دار) ===== */
+    @media (hover: hover) and (pointer: fine) {
+      .slide:hover {
+        --hover-scale: 1.03;
+        box-shadow:
+          0 40px 80px rgba(70, 102, 255, 0.35),
+          0 20px 40px rgba(1, 121, 111, 0.25),
+          0 8px 16px rgba(0, 0, 0, 0.15);
+        transition: box-shadow 0.4s ease, transform 0.1s ease-out;
+      }
+
+      .slide:hover img {
+        transform: scale(1.10);
+      }
+
+      .slide:hover::after {
+        opacity: 1;
+      }
+    }
+
+    /* ===== بخش‌های متنی ===== */
+    .section {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    .section h2 {
+      display: inline-block;
+      font-size: clamp(24px, 4vw, 38px);
+      font-weight: 800;
+      margin-bottom: 22px;
+      color: var(--text);
+    }
+
+    .section h2::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 3px;
+      margin-top: 12px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+    }
+
+    .section p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 2.1;
+      margin-bottom: 16px;
+    }
+
+    /* ===== درباره ما ===== */
+    .about-us {
+      position: relative;
+      z-index: 1;
+      max-width: 1040px;
+      margin: 60px auto 80px;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .about-us-inner {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      border-radius: 32px;
+      padding: clamp(40px, 6vw, 80px);
+      color: #fff;
+      box-shadow:
+        0 24px 60px rgba(1, 121, 111, 0.35),
+        0 10px 20px rgba(70, 102, 255, 0.15);
+      text-align: center;
+    }
+
+    .about-us-inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.20), transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(255, 255, 255, 0.10), transparent 50%);
+      pointer-events: none;
+    }
+
+    .about-us h2 {
+      position: relative;
+      display: inline-block;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 900;
+      margin-bottom: 42px;
+      color: #fff;
+    }
+
+    .about-us h2::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 4px;
+      margin-top: 12px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.35);
+    }
+
+    .about-us .info-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-top: 8px;
       text-align: right;
-      cursor: pointer;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+      perspective: 1000px;
     }
 
-    .feature:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 10px 24px rgba(1, 121, 111, 0.15), 0 2px 6px rgba(0, 0, 0, 0.06);
-      border-color: var(--primary);
-      background: #ffffff;
+    .info-item {
+      position: relative;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 18px;
+      padding: 22px 24px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow:
+        0 8px 22px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+      transform-style: preserve-3d;
+      transition:
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.4s ease,
+        background 0.4s ease;
     }
 
-    .feature-icon {
-      font-size: var(--feature-icon-size);
-      flex-shrink: 0;
-      transition: transform 0.25s ease;
+    .info-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      border-radius: 18px 18px 0 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.75) 50%, transparent 100%);
+      opacity: 0.85;
+      pointer-events: none;
     }
 
-    .feature:hover .feature-icon {
-      transform: scale(1.15) rotate(-6deg);
+    .info-item::after {
+      content: '';
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      bottom: -8px;
+      height: 14px;
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.28), transparent 70%);
+      filter: blur(6px);
+      z-index: -1;
+      opacity: 0.7;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
     }
 
-    @media (min-width: 1200px) {
-      :root { --card-max-width: 780px; --h1-size: 32px; --lead-size: 17px; --feature-size: 15px; }
+    @media (hover: hover) {
+      .info-item:hover {
+        transform: translateY(-6px) rotateX(3deg);
+        background:
+          linear-gradient(145deg, rgba(255, 255, 255, 0.30) 0%, rgba(255, 255, 255, 0.14) 100%);
+        box-shadow:
+          0 16px 40px rgba(0, 0, 0, 0.28),
+          0 4px 12px rgba(0, 0, 0, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.5),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.10);
+      }
+
+      .info-item:hover::after {
+        opacity: 1;
+        transform: translateY(2px) scale(1.05);
+      }
     }
 
-    @media (max-width: 1199px) {
-      :root { --card-max-width: 700px; --card-padding-x: 44px; --card-padding-y: 48px; --h1-size: 28px; --lead-size: 15.5px; --feature-size: 14.5px; }
+    .info-item .label {
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0.88;
+      margin-bottom: 10px;
+      letter-spacing: 0.3px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
     }
 
-    @media (max-width: 991px) {
-      :root { --card-max-width: 620px; --card-padding-x: 36px; --card-padding-y: 44px; --card-radius: 24px; --h1-size: 25px; --lead-size: 15px; --feature-size: 14px; --feature-icon-size: 20px; }
+    .info-item .value {
+      font-size: 15.5px;
+      font-weight: 600;
+      line-height: 1.8;
+      word-break: break-word;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.10);
     }
 
-    @media (max-width: 767px) {
-      :root { --card-max-width: 100%; --card-padding-x: 26px; --card-padding-y: 36px; --card-radius: 22px; --h1-size: 22px; --lead-size: 14px; --feature-size: 13.5px; --feature-icon-size: 18px; --features-cols: 1; --features-gap: 10px; }
-      body { padding: 16px; }
-      .lead { white-space: normal; overflow: visible; text-overflow: clip; }
-      .feature { padding: 12px 14px; border-radius: 12px; }
-      .status { font-size: 13px; padding: 8px 14px; margin-bottom: 26px; }
+    .info-item .value a {
+      color: #fff;
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.55);
+      transition: border-color 0.2s ease;
     }
 
-    @media (max-width: 479px) {
-      :root { --card-padding-x: 20px; --card-padding-y: 30px; --card-radius: 18px; --h1-size: 19px; --lead-size: 13px; --feature-size: 13px; --feature-icon-size: 17px; }
-      body { padding: 12px; }
-      .status { font-size: 12px; padding: 7px 12px; }
-      .feature { padding: 10px 12px; gap: 8px; }
+    .info-item .value a:hover {
+      border-color: #fff;
+    }
+
+    /* ===== فوتر ===== */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    /* =====================================================
+       ریسپانسیو
+       ===================================================== */
+    @media (max-width: 1200px) {
+      .slide {
+        width: min(68%, 680px);
+      }
+
+      .section {
+        padding: 58px 24px;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .hero .brand {
+        font-size: clamp(72px, 15vw, 150px);
+      }
+
+      .brand-wrap::before {
+        inset: -60px;
+      }
+
+      .gallery {
+        gap: 7vh;
+        padding: 7vh 7vw 16vh;
+      }
+
+      .slide {
+        width: min(78%, 620px);
+      }
+
+      .section {
+        padding: 54px 24px;
+      }
+
+      .section h2 {
+        font-size: clamp(24px, 4.5vw, 34px);
+      }
+
+      .about-us {
+        padding: 0 24px;
+      }
+
+      .about-us-inner {
+        padding: clamp(34px, 5.5vw, 60px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .theme-toggle {
+        top: 14px;
+        right: 14px;
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+      }
+
+      .hero {
+        padding: 70px 20px 50px;
+      }
+
+      .hero .brand {
+        font-size: clamp(64px, 16vw, 130px);
+        letter-spacing: -4px;
+      }
+
+      .brand-wrap::before {
+        inset: -45px;
+        filter: blur(40px);
+      }
+
+      .gallery {
+        gap: 6.5vh;
+        padding: 6.5vh 6vw 15vh;
+      }
+
+      .slide {
+        width: 100%;
+        border-radius: 20px;
+      }
+
+      .section {
+        padding: 48px 22px;
+      }
+
+      .section h2 {
+        margin-bottom: 20px;
+      }
+
+      .section p {
+        font-size: 15.5px;
+      }
+
+      .about-us {
+        padding: 0 18px;
+        margin: 44px auto 64px;
+      }
+
+      .about-us-inner {
+        padding: 38px 26px;
+        border-radius: 26px;
+      }
+
+      .about-us h2 {
+        margin-bottom: 32px;
+      }
+
+      .info-grid {
+        gap: 14px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .about-us .info-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .theme-toggle {
+        top: 12px;
+        right: 12px;
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+      }
+
+      .hero {
+        padding: 60px 16px 40px;
+      }
+
+      .hero .brand {
+        font-size: clamp(56px, 17vw, 100px);
+        letter-spacing: -3px;
+      }
+
+      .brand-wrap::before {
+        inset: -40px;
+        filter: blur(32px);
+      }
+
+      .gallery {
+        gap: 5.5vh;
+        padding: 5.5vh 5vw 14vh;
+      }
+
+      .slide {
+        border-radius: 16px;
+      }
+
+      .section {
+        padding: 42px 18px;
+      }
+
+      .section h2 {
+        font-size: clamp(22px, 6vw, 28px);
+        margin-bottom: 16px;
+      }
+
+      .section h2::after {
+        height: 2.5px;
+        margin-top: 10px;
+      }
+
+      .section p {
+        font-size: 15px;
+        line-height: 2;
+      }
+
+      .about-us {
+        padding: 0 14px;
+        margin: 40px auto 60px;
+      }
+
+      .about-us-inner {
+        padding: 32px 20px;
+        border-radius: 22px;
+      }
+
+      .about-us h2 {
+        font-size: clamp(26px, 7vw, 36px);
+        margin-bottom: 28px;
+      }
+
+      .about-us h2::after {
+        height: 3.5px;
+        margin-top: 10px;
+      }
+
+      .info-item {
+        padding: 18px 20px;
+        border-radius: 16px;
+      }
+
+      .info-item::before {
+        border-radius: 16px 16px 0 0;
+      }
+
+      .info-item .label {
+        font-size: 12.5px;
+        margin-bottom: 8px;
+      }
+
+      .info-item .value {
+        font-size: 14.5px;
+        line-height: 1.75;
+      }
+
+      footer {
+        padding: 30px 16px;
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .theme-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+        top: 10px;
+        right: 10px;
+      }
+
+      .hero {
+        padding: 56px 12px 40px;
+      }
+
+      .hero .brand {
+        font-size: clamp(46px, 16vw, 72px);
+        letter-spacing: -2px;
+      }
+
+      .brand-wrap::before {
+        inset: -32px;
+        filter: blur(28px);
+      }
+
+      .gallery {
+        gap: 4.5vh;
+        padding: 4.5vh 4vw 12vh;
+      }
+
+      .slide {
+        border-radius: 14px;
+      }
+
+      .section {
+        padding: 36px 14px;
+      }
+
+      .section h2 {
+        font-size: clamp(20px, 6.5vw, 24px);
+      }
+
+      .section p {
+        font-size: 14px;
+        line-height: 1.95;
+      }
+
+      .about-us {
+        padding: 0 12px;
+        margin: 32px auto 50px;
+      }
+
+      .about-us-inner {
+        padding: 26px 16px;
+        border-radius: 18px;
+      }
+
+      .about-us h2 {
+        font-size: clamp(22px, 7.5vw, 28px);
+        margin-bottom: 22px;
+      }
+
+      .info-grid {
+        gap: 10px;
+      }
+
+      .info-item {
+        padding: 15px 16px;
+        border-radius: 14px;
+      }
+
+      .info-item::before {
+        border-radius: 14px 14px 0 0;
+      }
+
+      .info-item .label {
+        font-size: 12px;
+        margin-bottom: 6px;
+      }
+
+      .info-item .value {
+        font-size: 13.5px;
+      }
+
+      footer {
+        padding: 24px 12px;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-height: 500px) and (orientation: landscape) {
+      .hero {
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+
+      .hero .brand {
+        font-size: clamp(56px, 12vh, 120px);
+      }
+
+      .brand-wrap::before {
+        inset: -30px;
+        filter: blur(28px);
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .section {
+        max-width: 960px;
+      }
+
+      .about-us {
+        max-width: 1120px;
+      }
+
+      .slide {
+        width: min(58%, 760px);
+      }
+    }
+
+    /* ===== دسترسی‌پذیری ===== */
+    @media (prefers-reduced-motion: reduce) {
+
+      .brand-wrap::before,
+      .slide img,
+      .info-item {
+        animation: none !important;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      .slide {
+        transition: none !important;
+      }
+
+      .slide:hover {
+        transform: none !important;
+      }
     }
   </style>
 </head>
@@ -200,36 +883,291 @@
 <body>
   <div class="bg-glow"></div>
 
-  <main class="card">
-    <h1>Qshoop <span>در حال راه‌اندازی</span></h1>
+  <button class="theme-toggle" id="themeToggle" aria-label="تغییر تم">
+    <span class="icon icon-sun">☀️</span>
+    <span class="icon icon-moon">🌙</span>
+  </button>
 
-    <p class="lead">
-      پلتفرم ارتباط هوشمند فروشنده و مشتری. به‌زودی در دسترس خواهد بود.
-    </p>
+  <main>
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+      <div class="brand-wrap">
+        <h1 class="brand"><span class="q">Q</span>shop</h1>
+      </div>
+    </section>
 
-    <div class="status">
-      <span class="dot"></span>
-      در حال توسعه
-    </div>
+    <!-- ===== گالری ===== -->
+    <section class="gallery" aria-label="گالری تصاویر">
+      <div class="slide"><img src="images/test.jpg" alt="تصویر ۱" loading="lazy" /></div>
+      <div class="slide"><img src="images/test2.jpg" alt="تصویر ۲" loading="lazy" /></div>
+      <div class="slide"><img src="images/test3.jpg" alt="تصویر ۳" loading="lazy" /></div>
+      <div class="slide"><img src="images/test4.jpg" alt="تصویر ۴" loading="lazy" /></div>
+      <div class="slide"><img src="images/test5.jpg" alt="تصویر ۵" loading="lazy" /></div>
+      <div class="slide"><img src="images/test6.jpg" alt="تصویر ۶" loading="lazy" /></div>
+      <div class="slide"><img src="images/test7.jpg" alt="تصویر ۷" loading="lazy" /></div>
+    </section>
 
-    <div class="features">
-      <div class="feature">
-        <span class="feature-icon">📷</span>
-        <span>اسکن و ورود فوری</span>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">📦</span>
-        <span>مدیریت محصولات</span>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">📍</span>
-        <span>موقعیت و مسیریابی</span>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">🔒</span>
-        <span>احراز هویت امن</span>
-      </div>
-    </div>
+    <!-- ===== درباره اپلیکیشن ===== -->
+    <section class="section">
+      <h2>درباره اپلیکیشن</h2>
+      <p>کیوشاپ یک اپلیکیشن جامع در حوزه تجارت و مبادلات کالا است که در زمینه خرید کالا، خدمات و مشاوره کاربرد دارد و در
+        بازه‌های زمانی روزانه، ماهانه و حتی سالانه قابل استفاده است. این اپلیکیشن دسترسی به قیمت، موجودی محصولات و
+        سرویس‌ها و خدمات مختلف و همچنین تخفیف‌ها را در ۲۴ ساعت شبانه‌روز و تنها از طریق گوشی همراه برای کاربران فراهم
+        می‌کند.</p>
+    </section>
+
+    <!-- ===== درباره شرکت ===== -->
+    <section class="section">
+      <h2>درباره شرکت</h2>
+      <p>شرکت طلوع کاوش داده هوشمند محصولات و خدمات متنوعی در زمینه برنامه‌نویسی و طراحی و توسعه سایت و اپلیکیشن ارائه
+        می‌دهد.</p>
+    </section>
+
+    <!-- ===== درباره ما ===== -->
+    <section class="about-us">
+      <div class="about-us-inner">
+        <h2>درباره ما</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="label">نام شرکت</div>
+            <div class="value">KAVANO</div>
+          </div>
+          <div class="info-item">
+            <div class="label">آدرس</div>
+            <div class="value">ملایر - خیابان مطفی خمینی(اراک) - پاساژ کریم خان</div>
+          </div>
+          <div class="info-item">
+            <div class="label">پشتیبانی</div>
+            <div class="value">
+              <a href="tel:+989198084414">09198084414</a><br />
+              <a href="tel:+989208868260">09208868260</a><br />
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="label">توسعه‌دهندگان</div>
+            <div class="value">
+              <p>احمدرضا حسین پور</p>
+              <p>محمد امین علی زاده</p>
+              <p>فرهاد مومنی </p>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="label">وب‌سایت</div>
+            <div class="value">
+              <a href="https://qshoop.ir" target="_blank" rel="noopener">qshoop.ir</a>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="label">شبکه‌های اجتماعی</div>
+            <div class="value">
+              <a href="https://instagram.com/Qshoop2026" target="_blank" rel="noopener">
+                اینستاگرام
+              </a>
+            </div>
+          </div>
+        </div>
+    </section>
+
+    <footer>
+      © <span id="year"></span> Q shop — تمامی حقوق محفوظ است.
+    </footer>
   </main>
+
+  <script>
+    /* ===== تم ===== */
+    const root = document.documentElement;
+    const toggleBtn = document.getElementById('themeToggle');
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) root.setAttribute('data-theme', savedTheme);
+    else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+      root.setAttribute('data-theme', 'dark');
+
+    toggleBtn.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    /* =========================================================
+       پارالاکس اسکرول + محوشدن
+       ========================================================= */
+    const slides = Array.from(document.querySelectorAll('.slide'));
+
+    function updateFade() {
+      const vh = window.innerHeight;
+      const maxDist = vh * 0.55;
+      slides.forEach(slide => {
+        const rect = slide.getBoundingClientRect();
+        const center = rect.top + rect.height / 2;
+        const dist = Math.abs(center - vh / 2);
+        const opacity = Math.max(0, Math.min(1, 1 - dist / maxDist));
+        slide.style.opacity = opacity.toFixed(3);
+        const shift = (center - vh / 2) * 0.06;
+        slide.style.setProperty('--parallax-y', `${shift.toFixed(1)}px`);
+      });
+    }
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => { updateFade(); ticking = false; });
+        ticking = true;
+      }
+    }, { passive: true });
+    window.addEventListener('resize', updateFade);
+    window.addEventListener('load', updateFade);
+    updateFade();
+
+    /* =========================================================
+       هاور سه‌بعدی — دسکتاپ (ماوس)
+       ========================================================= */
+    const hasMouse = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    if (hasMouse) {
+      slides.forEach(slide => {
+        let rafId = null;
+        slide.addEventListener('mousemove', (e) => {
+          if (rafId) cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(() => {
+            const rect = slide.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const nx = (x / rect.width - 0.5) * 2;
+            const ny = (y / rect.height - 0.5) * 2;
+            const maxTilt = 8;
+            slide.style.setProperty('--ry', `${(nx * maxTilt).toFixed(2)}deg`);
+            slide.style.setProperty('--rx', `${(-ny * maxTilt).toFixed(2)}deg`);
+            slide.style.setProperty('--glare-x', `${(x / rect.width * 100).toFixed(1)}%`);
+            slide.style.setProperty('--glare-y', `${(y / rect.height * 100).toFixed(1)}%`);
+          });
+        });
+        slide.addEventListener('mouseleave', () => {
+          if (rafId) cancelAnimationFrame(rafId);
+          slide.style.setProperty('--rx', '0deg');
+          slide.style.setProperty('--ry', '0deg');
+          slide.style.setProperty('--glare-x', '50%');
+          slide.style.setProperty('--glare-y', '50%');
+        });
+      });
+    }
+
+    /* =========================================================
+       موبایل ۱: تیلت با لمس (drag) — همه‌ی گوشی‌ها
+       ========================================================= */
+    const isTouch = window.matchMedia('(hover: none)').matches;
+
+    if (isTouch) {
+      slides.forEach(slide => {
+        let rafId = null;
+
+        function applyTouch(clientX, clientY) {
+          const rect = slide.getBoundingClientRect();
+          // محدوده‌ی لمسی کمی کوچک‌تر تا گوشه‌ها آزاد بمونن
+          const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+          const y = Math.max(0, Math.min(rect.height, clientY - rect.top));
+          const nx = (x / rect.width - 0.5) * 2;
+          const ny = (y / rect.height - 0.5) * 2;
+          const maxTilt = 8;
+
+          slide.style.setProperty('--ry', `${(nx * maxTilt).toFixed(2)}deg`);
+          slide.style.setProperty('--rx', `${(-ny * maxTilt).toFixed(2)}deg`);
+          slide.style.setProperty('--glare-x', `${(x / rect.width * 100).toFixed(1)}%`);
+          slide.style.setProperty('--glare-y', `${(y / rect.height * 100).toFixed(1)}%`);
+          slide.style.setProperty('--hover-scale', '1.02');
+          // فعال کردن نور منعکس‌شونده
+          slide.classList.add('touch-active');
+        }
+
+        function resetTouch() {
+          slide.style.setProperty('--rx', '0deg');
+          slide.style.setProperty('--ry', '0deg');
+          slide.style.setProperty('--glare-x', '50%');
+          slide.style.setProperty('--glare-y', '50%');
+          slide.style.setProperty('--hover-scale', '1');
+          slide.classList.remove('touch-active');
+        }
+
+        slide.addEventListener('touchstart', (e) => {
+          const t = e.touches[0];
+          applyTouch(t.clientX, t.clientY);
+        }, { passive: true });
+
+        slide.addEventListener('touchmove', (e) => {
+          const t = e.touches[0];
+          if (rafId) cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(() => applyTouch(t.clientX, t.clientY));
+        }, { passive: true });
+
+        slide.addEventListener('touchend', resetTouch, { passive: true });
+        slide.addEventListener('touchcancel', resetTouch, { passive: true });
+      });
+    }
+
+    /* =========================================================
+       موبایل ۲: تیلت با ژیروسکوپ — کج کردن گوشی
+       ========================================================= */
+    let gyroActive = false;
+    let gyroBase = null;
+    const GYRO_MAX = 10;  // درجه
+
+    function handleOrientation(e) {
+      if (e.beta == null || e.gamma == null) return;
+
+      // اولین بار: مقدار اولیه = وضعیت فعلی گوشی (کالیبراسیون)
+      if (gyroBase === null) {
+        gyroBase = { beta: e.beta, gamma: e.gamma };
+      }
+
+      const dBeta = e.beta - gyroBase.beta;
+      const dGamma = e.gamma - gyroBase.gamma;
+
+      // محدود کردن به بازه‌ی امن
+      const clamp = (v, m) => Math.max(-m, Math.min(m, v));
+      const rx = clamp(-dBeta * 0.4, GYRO_MAX);
+      const ry = clamp(dGamma * 0.4, GYRO_MAX);
+
+      // اعمال روی همه‌ی اسلایدها — با کمی تأخیر staggered برای جلوه‌ی عمق
+      slides.forEach((slide, i) => {
+        // اگه کاربر داره لمس می‌کنه، ژیرو رو نادیده بگیر
+        if (slide.classList.contains('touch-active')) return;
+        const factor = 1 - i * 0.05;
+        slide.style.setProperty('--rx', `${(rx * factor).toFixed(2)}deg`);
+        slide.style.setProperty('--ry', `${(ry * factor).toFixed(2)}deg`);
+      });
+    }
+
+    async function startGyro() {
+      // iOS 13+: نیاز به اجازه‌ی کاربر
+      if (typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
+        try {
+          const perm = await DeviceOrientationEvent.requestPermission();
+          if (perm !== 'granted') return;
+        } catch (err) {
+          console.warn('Gyro permission denied:', err);
+          return;
+        }
+      }
+      window.addEventListener('deviceorientation', handleOrientation, { passive: true });
+      gyroActive = true;
+    }
+
+    // فقط روی لمس فعال کن
+    if (isTouch) {
+      // درخواست اجازه با اولین لمس کاربر (iOS)
+      const tryGyro = () => {
+        startGyro();
+        window.removeEventListener('touchstart', tryGyro);
+        window.removeEventListener('click', tryGyro);
+      };
+      window.addEventListener('touchstart', tryGyro, { passive: true, once: true });
+      window.addEventListener('click', tryGyro, { passive: true, once: true });
+    }
+
+    /* ===== سال جاری ===== */
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
+
 </html>
