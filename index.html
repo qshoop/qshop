@@ -302,6 +302,17 @@
       transform: scale(1);
     }
 
+    /* روی موبایل: زوم/تیلت عکس در هاور غیرفعال */
+    @media (hover: none) {
+      .slide img {
+        transform: scale(1) !important;
+      }
+
+      .slide::after {
+        opacity: 0 !important;
+      }
+    }
+
     /* ===== هاور سه‌بعدی (فقط دستگاه‌های ماوس‌دار) ===== */
     @media (hover: hover) and (pointer: fine) {
       .slide:hover {
@@ -990,7 +1001,7 @@
     });
 
     /* =========================================================
-       پارالاکس اسکرول + محوشدن
+       پارالاکس اسکرول + محوشدن (روی همه‌ی دستگاه‌ها)
        ========================================================= */
     const slides = Array.from(document.querySelectorAll('.slide'));
 
@@ -1020,7 +1031,7 @@
     updateFade();
 
     /* =========================================================
-       هاور سه‌بعدی — دسکتاپ (ماوس)
+       🎯 هاور سه‌بعدی — فقط دسکتاپ / لپ‌تاپ (ماوس)
        ========================================================= */
     const hasMouse = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
@@ -1050,119 +1061,6 @@
           slide.style.setProperty('--glare-y', '50%');
         });
       });
-    }
-
-    /* =========================================================
-       موبایل ۱: تیلت با لمس (drag) — همه‌ی گوشی‌ها
-       ========================================================= */
-    const isTouch = window.matchMedia('(hover: none)').matches;
-
-    if (isTouch) {
-      slides.forEach(slide => {
-        let rafId = null;
-
-        function applyTouch(clientX, clientY) {
-          const rect = slide.getBoundingClientRect();
-          // محدوده‌ی لمسی کمی کوچک‌تر تا گوشه‌ها آزاد بمونن
-          const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
-          const y = Math.max(0, Math.min(rect.height, clientY - rect.top));
-          const nx = (x / rect.width - 0.5) * 2;
-          const ny = (y / rect.height - 0.5) * 2;
-          const maxTilt = 8;
-
-          slide.style.setProperty('--ry', `${(nx * maxTilt).toFixed(2)}deg`);
-          slide.style.setProperty('--rx', `${(-ny * maxTilt).toFixed(2)}deg`);
-          slide.style.setProperty('--glare-x', `${(x / rect.width * 100).toFixed(1)}%`);
-          slide.style.setProperty('--glare-y', `${(y / rect.height * 100).toFixed(1)}%`);
-          slide.style.setProperty('--hover-scale', '1.02');
-          // فعال کردن نور منعکس‌شونده
-          slide.classList.add('touch-active');
-        }
-
-        function resetTouch() {
-          slide.style.setProperty('--rx', '0deg');
-          slide.style.setProperty('--ry', '0deg');
-          slide.style.setProperty('--glare-x', '50%');
-          slide.style.setProperty('--glare-y', '50%');
-          slide.style.setProperty('--hover-scale', '1');
-          slide.classList.remove('touch-active');
-        }
-
-        slide.addEventListener('touchstart', (e) => {
-          const t = e.touches[0];
-          applyTouch(t.clientX, t.clientY);
-        }, { passive: true });
-
-        slide.addEventListener('touchmove', (e) => {
-          const t = e.touches[0];
-          if (rafId) cancelAnimationFrame(rafId);
-          rafId = requestAnimationFrame(() => applyTouch(t.clientX, t.clientY));
-        }, { passive: true });
-
-        slide.addEventListener('touchend', resetTouch, { passive: true });
-        slide.addEventListener('touchcancel', resetTouch, { passive: true });
-      });
-    }
-
-    /* =========================================================
-       موبایل ۲: تیلت با ژیروسکوپ — کج کردن گوشی
-       ========================================================= */
-    let gyroActive = false;
-    let gyroBase = null;
-    const GYRO_MAX = 10;  // درجه
-
-    function handleOrientation(e) {
-      if (e.beta == null || e.gamma == null) return;
-
-      // اولین بار: مقدار اولیه = وضعیت فعلی گوشی (کالیبراسیون)
-      if (gyroBase === null) {
-        gyroBase = { beta: e.beta, gamma: e.gamma };
-      }
-
-      const dBeta = e.beta - gyroBase.beta;
-      const dGamma = e.gamma - gyroBase.gamma;
-
-      // محدود کردن به بازه‌ی امن
-      const clamp = (v, m) => Math.max(-m, Math.min(m, v));
-      const rx = clamp(-dBeta * 0.4, GYRO_MAX);
-      const ry = clamp(dGamma * 0.4, GYRO_MAX);
-
-      // اعمال روی همه‌ی اسلایدها — با کمی تأخیر staggered برای جلوه‌ی عمق
-      slides.forEach((slide, i) => {
-        // اگه کاربر داره لمس می‌کنه، ژیرو رو نادیده بگیر
-        if (slide.classList.contains('touch-active')) return;
-        const factor = 1 - i * 0.05;
-        slide.style.setProperty('--rx', `${(rx * factor).toFixed(2)}deg`);
-        slide.style.setProperty('--ry', `${(ry * factor).toFixed(2)}deg`);
-      });
-    }
-
-    async function startGyro() {
-      // iOS 13+: نیاز به اجازه‌ی کاربر
-      if (typeof DeviceOrientationEvent !== 'undefined' &&
-        typeof DeviceOrientationEvent.requestPermission === 'function') {
-        try {
-          const perm = await DeviceOrientationEvent.requestPermission();
-          if (perm !== 'granted') return;
-        } catch (err) {
-          console.warn('Gyro permission denied:', err);
-          return;
-        }
-      }
-      window.addEventListener('deviceorientation', handleOrientation, { passive: true });
-      gyroActive = true;
-    }
-
-    // فقط روی لمس فعال کن
-    if (isTouch) {
-      // درخواست اجازه با اولین لمس کاربر (iOS)
-      const tryGyro = () => {
-        startGyro();
-        window.removeEventListener('touchstart', tryGyro);
-        window.removeEventListener('click', tryGyro);
-      };
-      window.addEventListener('touchstart', tryGyro, { passive: true, once: true });
-      window.addEventListener('click', tryGyro, { passive: true, once: true });
     }
 
     /* ===== سال جاری ===== */
